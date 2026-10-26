@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Nocturna: Blood on the Clocktower</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700;900&family=Eczar:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        victorian: {
+                            gold: '#d4af37',
+                            goldHover: '#f3cf55',
+                            darkRed: '#4a0404',
+                            crimson: '#8b0000',
+                            blood: '#660000',
+                            paper: '#f2e3c6',
+                            paperDark: '#d9be8b',
+                            night: '#0a080d',
+                            midnight: '#120f1a'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['"Cinzel Decorative"', 'serif'],
+                        gothic: ['Cinzel', 'serif'],
+                        serifText: ['Eczar', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframe Animations & Parallax Ambient Styles */
+        @keyframes candleFlicker {
+            0%, 100% { opacity: 0.85; transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,140,0,0.6)); }
+            25% { opacity: 0.95; transform: scale(1.03) rotate(0.5deg); filter: drop-shadow(0 0 15px rgba(255,160,20,0.8)); }
+            50% { opacity: 0.75; transform: scale(0.98) rotate(-0.5deg); filter: drop-shadow(0 0 8px rgba(230,100,0,0.5)); }
+            75% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 18px rgba(255,180,30,0.9)); }
+        }
+
+        .candle-flame {
+            animation: candleFlicker 2.5s infinite ease-in-out;
+            transform-origin: center bottom;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(139, 0, 0, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.8); }
+            50% { box-shadow: 0 0 45px rgba(180, 0, 0, 0.7), inset 0 0 25px rgba(0, 0, 0, 0.9); }
+        }
+
+        .gothic-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        /* Envelope / Foldable Card CSS Transformations */
+        .card-perspective {
+            perspective: 1200px;
+        }
+
+        .foldable-panel {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Paper aging texture overlay */
+        .paper-texture {
+            background-color: #f2e3c6;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(0,0,0,0.15) 100%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            box-shadow: inset 0 0 40px rgba(74, 4, 4, 0.3), 0 20px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .wax-seal {
+            background: radial-gradient(circle at 30% 30%, #a81313, #570000);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .wax-seal:hover {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 6px 16px rgba(180, 0, 0, 0.6), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* Clock Gear Rotating Effect */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        .gear-spin {
+            animation: spinSlow 60s linear infinite;
+        }
+        .gear-spin-rev {
+            animation: spinReverse 45s linear infinite;
+        }
+
+        /* Fog Animation */
+        @keyframes fogMove {
+            0% { transform: translateX(-10%); }
+            50% { transform: translateX(10%); }
+            100% { transform: translateX(-10%); }
+        }
+
+        .fog-layer {
+            animation: fogMove 25s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar for inner card */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2b1f1d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b0000;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-victorian-night text-victorian-paper font-serifText min-h-screen flex flex-col items-center justify-center overflow-x-hidden relative select-none">
+
+    <!-- Ambient Sound Elements (Web Audio Synthesizer for Audio FX) -->
+    <audio id="audioTick" loop src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA="></audio>
+
+    <!-- Visual Background: Fog & Clockwork Gothic Atmosphere -->
+    <div class="fixed inset-0 pointer-events-none z-0 opacity-20 overflow-hidden">
+        <div class="fog-layer absolute inset-0 bg-repeat w-[120%] -left-[10%]" style="background-image: radial-gradient(ellipse at center, rgba(139,0,0,0.2) 0%, rgba(0,0,0,0) 70%);"></div>
+        
+        <!-- Large Clock Silhouette Background -->
+        <div class="absolute -top-20 -right-20 w-96 h-96 sm:w-[500px] sm:h-[500px] opacity-15 gear-spin border-8 border-dashed border-victorian-gold rounded-full flex items-center justify-center">
+            <div class="w-3/4 h-3/4 border-4 border-victorian-gold border-dotted rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-gear text-9xl text-victorian-gold opacity-30"></i>
+            </div>
+        </div>
+        
+        <div class="absolute -bottom-20 -left-20 w-80 h-80 opacity-10 gear-spin-rev border-4 border-victorian-gold rounded-full flex items-center justify-center">
+            <i class="fa-solid fa-clock text-9xl text-victorian-gold"></i>
+        </div>
+    </div>
+
+    <!-- Candle Ambient Lights (Top Corners) -->
+    <div class="fixed top-4 left-6 sm:left-12 z-20 flex flex-col items-center pointer-events-none">
+        <div class="w-3 h-5 bg-amber-400 rounded-full candle-flame mb-1"></div>
+        <div class="w-4 h-12 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-sm shadow-md"></div>
+    </div>
+    <div class="fixed top-4 right-6 sm:right-12 z-20 flex flex-col items-center pointer-events-none">
+        <div class="w-3 h-5 bg-amber-400 rounded-full candle-flame mb-1"></div>
+        <div class="w-4 h-12 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-sm shadow-md"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 w-full max-w-2xl p-4 my-6 flex flex-col items-center">
+
+        <!-- Header: Ambient Clock Status & Controls -->
+        <header class="text-center mb-6 w-full">
+            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-victorian-midnight border border-victorian-gold/30 text-victorian-gold text-xs font-gothic tracking-widest uppercase shadow-lg mb-2">
+                <i class="fa-solid fa-bell text-victorian-crimson animate-bounce"></i>
+                <span>Ravenswood Bluff &bull; Noche de Halloween</span>
+            </div>
+            
+            <!-- Audio Toggle Control -->
+            <button id="audioBtn" onclick="toggleAudio()" class="fixed bottom-4 right-4 z-50 bg-victorian-midnight/80 hover:bg-victorian-darkRed border border-victorian-gold/50 text-victorian-gold p-3 rounded-full shadow-2xl transition duration-300 flex items-center justify-center group" title="Alternar Sonido de Fondo">
+                <i id="audioIcon" class="fa-solid fa-volume-xmark text-lg group-hover:scale-110 transition"></i>
+            </button>
+            
+            <!-- Edit Mode Toggle Button -->
+            <button onclick="toggleEditMode()" class="fixed bottom-4 left-4 z-50 bg-victorian-midnight/80 hover:bg-victorian-darkRed border border-victorian-gold/50 text-victorian-gold px-3 py-2 rounded-lg text-xs font-gothic tracking-wider shadow-2xl transition flex items-center gap-2">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span id="editBtnText">Personalizar Datos</span>
+            </button>
+        </header>
+
+        <!-- CARD PERSPECTIVE CONTAINER -->
+        <div class="card-perspective w-full">
+
+            <!-- STEP 1: SEALED ENVELOPE FRONT -->
+            <div id="step1" class="paper-texture rounded-lg border-2 border-victorian-gold/60 p-8 sm:p-12 text-center text-stone-900 gothic-glow cursor-pointer transition-all duration-700 relative overflow-hidden group" onclick="openStep2()">
+                
+                <!-- Envelope Corner Ornaments -->
+                <div class="absolute top-2 left-2 border-t-2 border-l-2 border-victorian-darkRed w-8 h-8"></div>
+                <div class="absolute top-2 right-2 border-t-2 border-r-2 border-victorian-darkRed w-8 h-8"></div>
+                <div class="absolute bottom-2 left-2 border-b-2 border-l-2 border-victorian-darkRed w-8 h-8"></div>
+                <div class="absolute bottom-2 right-2 border-b-2 border-r-2 border-victorian-darkRed w-8 h-8"></div>
+
+                <p class="font-gothic text-xs tracking-[0.3em] uppercase text-victorian-darkRed font-bold mb-2">Confidencial &bull; Exclusivo</p>
+                
+                <h1 class="font-title text-2xl sm:text-4xl text-victorian-darkRed font-black mb-4 tracking-wider leading-tight">
+                    Para los Ojos de<br>
+                    <span id="displayGuestName" class="underline decoration-victorian-gold decoration-2 underline-offset-4 cursor-text" title="Clic para editar" onclick="event.stopPropagation(); makeEditable(this, 'guestName')">[Nombre del Invitado]</span>
+                </h1>
+
+                <!-- Clocktower SVG Emblem -->
+                <div class="my-6 flex justify-center items-center">
+                    <div class="relative w-28 h-28 flex items-center justify-center">
+                        <i class="fa-solid fa-clock-rotate-left text-6xl text-victorian-darkRed/80 group-hover:scale-110 transition duration-500"></i>
+                    </div>
+                </div>
+
+                <p class="font-serifText italic text-sm text-stone-800 mb-8 max-w-md mx-auto">
+                    "Rómpase el sello únicamente si se atreve a enfrentarse a las sombras tras el repicar de la medianoche."
+                </p>
+
+                <!-- Wax Seal Button -->
+                <div class="inline-flex flex-col items-center gap-2">
+                    <div class="wax-seal w-20 h-20 rounded-full flex items-center justify-center text-victorian-paper font-title text-xl font-bold border-2 border-amber-300/40 cursor-pointer shadow-2xl">
+                        <i class="fa-solid fa-skull text-2xl"></i>
+                    </div>
+                    <span class="font-gothic text-xs tracking-widest text-victorian-darkRed uppercase font-bold mt-2 animate-pulse">
+                        [ Haz Clic Para Romper el Sello ]
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- STEP 2: THE RIDDLE (UNFOLDED STEP 1) -->
+            <div id="step2" class="hidden paper-texture rounded-lg border-2 border-victorian-gold/60 p-6 sm:p-10 text-stone-900 gothic-glow transition-all duration-700 relative">
+                
+                <!-- Decorative Header -->
+                <div class="text-center border-b-2 border-victorian-darkRed/30 pb-4 mb-6">
+                    <span class="font-gothic text-xs tracking-[0.2em] text-victorian-crimson uppercase font-bold">El Primer Desafío de Ravenswood</span>
+                    <h2 class="font-title text-xl sm:text-3xl text-victorian-darkRed font-bold mt-1">El Acertijo de la Torre</h2>
+                </div>
+
+                <div class="text-center my-6 space-y-4">
+                    <p class="font-serifText italic text-stone-800 text-base sm:text-lg">
+                        Escuchas el tictac distante en la penumbra... Uno de nosotros guarda un secreto mortal. Si deseas sobrevivir a la velada y descubrir tu pase de entrada, responde:
+                    </p>
+
+                    <!-- Riddle Box -->
+                    <div class="bg-stone-900/10 border-l-4 border-victorian-darkRed p-4 sm:p-6 rounded-r-lg my-6 text-left shadow-inner">
+                        <blockquote class="font-gothic text-stone-900 font-semibold text-lg sm:text-xl leading-relaxed text-center italic">
+                            "Tengo agujas pero no coso,<br>
+                            marco el tiempo del inocente y el reposo.<br>
+                            ¿Qué soy?"
+                        </blockquote>
+                    </div>
+
+                    <!-- Interactive Answer Options -->
+                    <div class="space-y-3 max-w-md mx-auto pt-2">
+                        <p class="font-gothic text-xs uppercase tracking-wider text-stone-700 font-bold mb-2">Selecciona tu respuesta:</p>
+                        
+                        <button onclick="checkAnswer(false, this)" class="w-full py-3 px-4 rounded-md bg-stone-800/10 hover:bg-victorian-darkRed hover:text-victorian-paper border border-victorian-darkRed/40 font-gothic font-semibold transition text-sm flex items-center justify-between group">
+                            <span>A) Un Reloj de la Villa</span>
+                            <i class="fa-solid fa-ghost opacity-0 group-hover:opacity-100 transition"></i>
+                        </button>
+
+                        <button onclick="checkAnswer(true, this)" class="w-full py-3 px-4 rounded-md bg-stone-800/10 hover:bg-victorian-darkRed hover:text-victorian-paper border border-victorian-darkRed/40 font-gothic font-semibold transition text-sm flex items-center justify-between group">
+                            <span>B) La Torre del Reloj</span>
+                            <i class="fa-solid fa-check opacity-0 group-hover:opacity-100 transition"></i>
+                        </button>
+
+                        <button onclick="checkAnswer(false, this)" class="w-full py-3 px-4 rounded-md bg-stone-800/10 hover:bg-victorian-darkRed hover:text-victorian-paper border border-victorian-darkRed/40 font-gothic font-semibold transition text-sm flex items-center justify-between group">
+                            <span>C) Una Bruja del Bosque</span>
+                            <i class="fa-solid fa-hat-wizard opacity-0 group-hover:opacity-100 transition"></i>
+                        </button>
+                    </div>
+
+                    <!-- Feedback Message -->
+                    <div id="riddleFeedback" class="h-6 font-gothic text-sm font-bold text-victorian-crimson mt-3 transition-opacity duration-300 opacity-0"></div>
+                </div>
+            </div>
+
+
+            <!-- STEP 3: FULL INVITATION DETAILS -->
+            <div id="step3" class="hidden paper-texture rounded-lg border-2 border-victorian-gold/80 p-6 sm:p-10 text-stone-900 gothic-glow transition-all duration-1000 relative">
+                
+                <!-- Ornamental Border Frame -->
+                <div class="border-2 border-victorian-darkRed/40 p-4 sm:p-6 rounded-md relative">
+                    
+                    <!-- Header -->
+                    <div class="text-center border-b-2 border-victorian-darkRed/30 pb-4 mb-6">
+                        <div class="inline-block p-2 bg-victorian-darkRed text-victorian-gold rounded-full mb-2 shadow-md">
+                            <i class="fa-solid fa-dungeon text-xl"></i>
+                        </div>
+                        <span class="block font-gothic text-xs tracking-[0.25em] text-victorian-crimson font-bold uppercase">¡Respuestas acertada!</span>
+                        <h1 class="font-title text-2xl sm:text-4xl text-victorian-darkRed font-black tracking-wide mt-1">
+                            NOCHE DE JUICIO Y SOMBRAS
+                        </h1>
+                        <p class="font-gothic text-xs text-stone-700 tracking-widest mt-1 uppercase font-semibold">Fiesta de Juegos de Mesa &bull; Blood on the Clocktower</p>
+                    </div>
+
+                    <!-- Invitation Body -->
+                    <p class="font-serifText text-base sm:text-lg text-stone-800 text-center leading-relaxed mb-6">
+                        Has probado tu agudeza mental. Quedas formalmente convocado/a a una velada inmersiva de engaño, deducción, conspiración y juegos de estrategia en las penumbras de Halloween.
+                    </p>
+
+                    <!-- Event Details Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                        
+                        <!-- Date -->
+                        <div class="bg-stone-900/5 p-4 rounded border border-victorian-darkRed/20 flex items-start gap-3">
+                            <i class="fa-solid fa-calendar-days text-victorian-crimson text-xl mt-1"></i>
+                            <div>
+                                <span class="block font-gothic text-xs font-bold uppercase text-victorian-darkRed">¿Cuándo?</span>
+                                <span id="displayDate" class="font-serifText font-bold text-stone-900 text-sm sm:text-base cursor-text" onclick="makeEditable(this, 'eventDate')">Sábado, 31 de Octubre</span>
+                            </div>
+                        </div>
+
+                        <!-- Time -->
+                        <div class="bg-stone-900/5 p-4 rounded border border-victorian-darkRed/20 flex items-start gap-3">
+                            <i class="fa-solid fa-hourglass-half text-victorian-crimson text-xl mt-1"></i>
+                            <div>
+                                <span class="block font-gothic text-xs font-bold uppercase text-victorian-darkRed">¿Hora de Convocatoria?</span>
+                                <span id="displayTime" class="font-serifText font-bold text-stone-900 text-sm sm:text-base cursor-text" onclick="makeEditable(this, 'eventTime')">20:00 hrs (Medianoche en el Pueblo)</span>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="bg-stone-900/5 p-4 rounded border border-victorian-darkRed/20 flex items-start gap-3 sm:col-span-2">
+                            <i class="fa-solid fa-location-dot text-victorian-crimson text-xl mt-1"></i>
+                            <div class="w-full">
+                                <span class="block font-gothic text-xs font-bold uppercase text-victorian-darkRed">¿Lugar de Reunión?</span>
+                                <span id="displayLocation" class="font-serifText font-bold text-stone-900 text-sm sm:text-base block cursor-text" onclick="makeEditable(this, 'eventLocation')">La Mansión de Ravenswood Bluff (Calle Principal #123)</span>
+                            </div>
+                        </div>
+
+                        <!-- Dress Code -->
+                        <div class="bg-stone-900/5 p-4 rounded border border-victorian-darkRed/20 flex items-start gap-3 sm:col-span-2">
+                            <i class="fa-solid fa-mask text-victorian-crimson text-xl mt-1"></i>
+                            <div>
+                                <span class="block font-gothic text-xs font-bold uppercase text-victorian-darkRed">Código de Vestimenta (Disfraz)</span>
+                                <span id="displayDressCode" class="font-serifText text-stone-900 text-sm block cursor-text" onclick="makeEditable(this, 'eventDressCode')">
+                                    Gótico victoriano, aldeano sospechoso, demonio, o tu personaje emblemático de juego de mesa favorito.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role Assignment Card -->
+                    <div class="bg-victorian-darkRed text-victorian-paper p-4 rounded-lg shadow-md mb-6 text-center border border-victorian-gold/40">
+                        <i class="fa-solid fa-scroll text-victorian-gold text-2xl mb-1"></i>
+                        <h3 class="font-title text-sm tracking-wider uppercase text-victorian-gold">Tu Misión en el Pueblo</h3>
+                        <p class="font-serifText text-xs sm:text-sm italic opacity-90 mt-1">
+                            "Ven preparado/a para deducir, mentir sin piedad o descubrir al demonio entre nosotros. Se servirán brebajes y vituallas."
+                        </p>
+                    </div>
+
+                    <!-- Interactive Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                        <!-- RSVP Button -->
+                        <button onclick="handleRSVP()" class="w-full sm:w-auto px-8 py-3 bg-victorian-darkRed hover:bg-victorian-crimson text-victorian-paper font-gothic font-bold text-sm tracking-widest uppercase rounded shadow-xl border border-victorian-gold transition duration-300 flex items-center justify-center gap-2 group">
+                            <i class="fa-solid fa-check-double text-victorian-gold group-hover:scale-125 transition"></i>
+                            <span>Confirmar Asistencia (RSVP)</span>
+                        </button>
+
+                        <!-- Add to Calendar Mock -->
+                        <button onclick="addToCalendar()" class="w-full sm:w-auto px-6 py-3 bg-stone-800/20 hover:bg-stone-800/40 text-stone-900 font-gothic font-semibold text-xs tracking-wider uppercase rounded border border-victorian-darkRed/40 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calendar-plus text-victorian-darkRed"></i>
+                            <span>Agendar Evento</span>
+                        </button>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <p class="text-center font-gothic text-[10px] uppercase text-stone-600 tracking-widest mt-6">
+                        Organizado bajo el sello del Narrador del Grimorio
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CUSTOMIZATION PANEL (Drawer for easy editing) -->
+        <div id="editPanel" class="hidden w-full bg-victorian-midnight border border-victorian-gold/40 rounded-lg p-6 mt-6 shadow-2xl text-victorian-paper">
+            <h3 class="font-title text-lg text-victorian-gold mb-4 border-b border-victorian-gold/20 pb-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-sliders mr-2"></i>Personalizar Detalles de la Invitación</span>
+                <button onclick="toggleEditMode()" class="text-stone-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <label class="block font-gothic text-xs text-victorian-gold mb-1">Nombre del Invitado</label>
+                    <input type="text" id="inputGuestName" oninput="updateDetails()" class="w-full bg-stone-900 border border-stone-700 rounded p-2 text-white font-serifText">
+                </div>
+                <div>
+                    <label class="block font-gothic text-xs text-victorian-gold mb-1">Fecha del Evento</label>
+                    <input type="text" id="inputDate" oninput="updateDetails()" class="w-full bg-stone-900 border border-stone-700 rounded p-2 text-white font-serifText">
+                </div>
+                <div>
+                    <label class="block font-gothic text-xs text-victorian-gold mb-1">Hora</label>
+                    <input type="text" id="inputTime" oninput="updateDetails()" class="w-full bg-stone-900 border border-stone-700 rounded p-2 text-white font-serifText">
+                </div>
+                <div>
+                    <label class="block font-gothic text-xs text-victorian-gold mb-1">Ubicación / Dirección</label>
+                    <input type="text" id="inputLocation" oninput="updateDetails()" class="w-full bg-stone-900 border border-stone-700 rounded p-2 text-white font-serifText">
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block font-gothic text-xs text-victorian-gold mb-1">Código de Vestimenta / Notas</label>
+                    <textarea id="inputDressCode" oninput="updateDetails()" rows="2" class="w-full bg-stone-900 border border-stone-700 rounded p-2 text-white font-serifText"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+                <button onclick="toggleEditMode()" class="px-4 py-2 bg-victorian-gold text-victorian-night font-gothic font-bold text-xs uppercase rounded hover:bg-victorian-goldHover transition">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Message Container (Replaces Browser Alert) -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-victorian-midnight border-2 border-victorian-gold rounded-lg max-w-md w-full p-6 text-center text-victorian-paper shadow-2xl relative">
+            <div class="w-16 h-16 bg-victorian-darkRed rounded-full flex items-center justify-center mx-auto mb-4 border border-victorian-gold">
+                <i id="modalIcon" class="fa-solid fa-scroll text-2xl text-victorian-gold"></i>
+            </div>
+            <h3 id="modalTitle" class="font-title text-xl text-victorian-gold mb-2"></h3>
+            <p id="modalBody" class="font-serifText text-sm opacity-90 mb-6 leading-relaxed"></p>
+            <button onclick="closeModal()" class="px-6 py-2 bg-victorian-darkRed hover:bg-victorian-crimson border border-victorian-gold text-victorian-paper font-gothic text-xs uppercase tracking-widest rounded transition">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Web Audio Synthesizer for Creepy Clock Ticking Sound
+        let audioContext = null;
+        let isAudioPlaying = false;
+        let tickInterval = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTickSound() {
+            if (!audioContext || !isAudioPlaying) return;
+            
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, audioContext.currentTime + 0.04);
+                
+                gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.04);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.05);
+            } catch (e) {
+                console.log("Audio play error", e);
+            }
+        }
+
+        function toggleAudio() {
+            initAudio();
+            const icon = document.getElementById('audioIcon');
+            
+            if (!isAudioPlaying) {
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                isAudioPlaying = true;
+                icon.className = 'fa-solid fa-volume-high text-lg text-victorian-gold animate-pulse';
+                tickInterval = setInterval(playTickSound, 1000);
+            } else {
+                isAudioPlaying = false;
+                icon.className = 'fa-solid fa-volume-xmark text-lg';
+                clearInterval(tickInterval);
+            }
+        }
+
+        // Invitation Flow Controls
+        function openStep2() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+
+            // Play ambient audio automatically on first interaction
+            if (!isAudioPlaying) {
+                toggleAudio();
+            }
+
+            // Animate transition
+            step1.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                step2.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    step2.classList.remove('opacity-0', 'scale-95');
+                }, 50);
+            }, 500);
+        }
+
+        function checkAnswer(isCorrect, btnElement) {
+            const feedback = document.getElementById('riddleFeedback');
+            feedback.classList.remove('opacity-0');
+
+            if (isCorrect) {
+                feedback.textContent = "¡Correcto! Las agujas de la Torre marcan el destino...";
+                feedback.className = "h-6 font-gothic text-sm font-bold text-emerald-800 mt-3 transition-opacity duration-300 opacity-100";
+                
+                // Transition to Step 3
+                setTimeout(() => {
+                    const step2 = document.getElementById('step2');
+                    const step3 = document.getElementById('step3');
+
+                    step2.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        step2.classList.add('hidden');
+                        step3.classList.remove('hidden');
+                        step3.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            step3.classList.remove('opacity-0', 'scale-95');
+                        }, 50);
+                    }, 500);
+                }, 1200);
+
+            } else {
+                feedback.textContent = "Respuesta incorrecta. Las sombras se mofan de tu equivocación. Inténtalo de nuevo.";
+                feedback.className = "h-6 font-gothic text-sm font-bold text-victorian-crimson mt-3 transition-opacity duration-300 opacity-100 animate-bounce";
+                
+                btnElement.classList.add('border-red-600', 'bg-red-950/20');
+                setTimeout(() => {
+                    feedback.classList.add('opacity-0');
+                }, 2500);
+            }
+        }
+
+        // Custom Modal Function (Replaces alert())
+        function showModal(title, bodyText, iconClass = 'fa-scroll') {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = bodyText;
+            document.getElementById('modalIcon').className = `fa-solid ${iconClass} text-2xl text-victorian-gold`;
+            document.getElementById('modalOverlay').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.add('hidden');
+        }
+
+        function handleRSVP() {
+            const guestName = document.getElementById('displayGuestName').textContent;
+            showModal(
+                "¡Asistencia Registrada!", 
+                `Tu presencia ha sido anotada en el Grimorio oficial de Ravenswood Bluff, ${guestName}. Que la suerte esté de tu lado cuando suenen las campanas.`, 
+                'fa-user-check'
+            );
+        }
+
+        function addToCalendar() {
+            showModal(
+                "Recordatorio en la Torre", 
+                "El evento se ha guardado simbólicamente en tu itinerario. No olvides llevar tu astucia y el mejor disfraz de la velada.", 
+                'fa-calendar-check'
+            );
+        }
+
+        // Customization & Edit Logic
+        function toggleEditMode() {
+            const panel = document.getElementById('editPanel');
+            const editBtnText = document.getElementById('editBtnText');
+            
+            if (panel.classList.contains('hidden')) {
+                // Populate inputs with current values
+                document.getElementById('inputGuestName').value = document.getElementById('displayGuestName').textContent;
+                document.getElementById('inputDate').value = document.getElementById('displayDate').textContent;
+                document.getElementById('inputTime').value = document.getElementById('displayTime').textContent;
+                document.getElementById('inputLocation').value = document.getElementById('displayLocation').textContent;
+                document.getElementById('inputDressCode').value = document.getElementById('displayDressCode').textContent;
+
+                panel.classList.remove('hidden');
+                editBtnText.textContent = "Cerrar Panel";
+                panel.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                panel.classList.add('hidden');
+                editBtnText.textContent = "Personalizar Datos";
+            }
+        }
+
+        function updateDetails() {
+            const guest = document.getElementById('inputGuestName').value || '[Nombre del Invitado]';
+            const date = document.getElementById('inputDate').value || 'Sábado, 31 de Octubre';
+            const time = document.getElementById('inputTime').value || '20:00 hrs';
+            const location = document.getElementById('inputLocation').value || 'Ravenswood Bluff';
+            const dressCode = document.getElementById('inputDressCode').value || 'Atuendo Victoriano Gótico o Disfraz';
+
+            document.getElementById('displayGuestName').textContent = guest;
+            document.getElementById('displayDate').textContent = date;
+            document.getElementById('displayTime').textContent = time;
+            document.getElementById('displayLocation').textContent = location;
+            document.getElementById('displayDressCode').textContent = dressCode;
+        }
+
+        function makeEditable(element, type) {
+            // Quick feedback when clicking text directly
+            const current = element.textContent;
+            const newValue = prompt("Modificar este campo:", current);
+            if (newValue !== null && newValue.trim() !== "") {
+                element.textContent = newValue;
+            }
+        }
+
+        // Initialize default input values on load
+        window.onload = function() {
+            document.getElementById('inputGuestName').value = "Lord / Lady Asistente";
+            document.getElementById('inputDate').value = "Sábado, 31 de Octubre";
+            document.getElementById('inputTime').value = "20:00 hrs";
+            document.getElementById('inputLocation').value = "La Mansión de Ravenswood Bluff (Calle Principal #123)";
+            document.getElementById('inputDressCode').value = "Gótico victoriano, aldeano sospechoso, demonio, o personaje de juego de mesa.";
+        }
+    </script>
+</body>
+</html>

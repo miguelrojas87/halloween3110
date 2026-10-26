@@ -1,0 +1,6 @@
+{
+  "name": "Ravenswood Bluff — Invitaciones Blood on the Clocktower",
+  "description": "Plataforma de gestión de invitaciones, confirmación de asistencia (RSVP), acertijo interactivo y actualizaciones por correo para fiesta de Halloween temática de Blood on the Clocktower.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

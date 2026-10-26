@@ -1,0 +1,478 @@
+@import "tailwindcss";
+
+@theme {
+  --color-victorian-gold: #d4af37;
+  --color-victorian-goldHover: #f3cf55;
+  --color-victorian-darkRed: #4a0404;
+  --color-victorian-crimson: #8b0000;
+  --color-victorian-blood: #660000;
+  --color-victorian-paper: #f2e3c6;
+  --color-victorian-paperDark: #d9be8b;
+  --color-victorian-night: #0a080d;
+  --color-victorian-midnight: #120f1a;
+
+  --font-title: "Cinzel Decorative", serif;
+  --font-gothic: "Cinzel", serif;
+  --font-serifText: "Eczar", serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@keyframes candleFlicker {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.6));
+  }
+  25% {
+    opacity: 0.95;
+    transform: scale(1.03) rotate(0.5deg);
+    filter: drop-shadow(0 0 15px rgba(255, 160, 20, 0.8));
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(0.98) rotate(-0.5deg);
+    filter: drop-shadow(0 0 8px rgba(230, 100, 0, 0.5));
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 18px rgba(255, 180, 30, 0.9));
+  }
+}
+
+.candle-flame {
+  animation: candleFlicker 2.5s infinite ease-in-out;
+  transform-origin: center bottom;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(139, 0, 0, 0.35), inset 0 0 15px rgba(0, 0, 0, 0.75);
+  }
+  50% {
+    box-shadow: 0 0 42px rgba(180, 0, 0, 0.6), inset 0 0 25px rgba(0, 0, 0, 0.85);
+  }
+}
+
+.gothic-glow {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+.paper-texture {
+  background-color: rgba(242, 227, 198, 0.72);
+  backdrop-filter: blur(2.5px);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.14) 0%, rgba(0, 0, 0, 0.18) 100%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  box-shadow: inset 0 0 40px rgba(74, 4, 4, 0.28), 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.wax-seal {
+  background: radial-gradient(circle at 30% 30%, #a81313, #570000);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-seal:hover {
+  transform: scale(1.07) rotate(3deg);
+  box-shadow: 0 6px 16px rgba(180, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes sealShake {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  15% { transform: translate(-4px, 2px) rotate(-3deg) scale(1.06); }
+  30% { transform: translate(4px, -2px) rotate(3deg) scale(1.09); }
+  45% { transform: translate(-3px, -2px) rotate(-2deg) scale(1.04); }
+  60% { transform: translate(3px, 2px) rotate(2deg) scale(1.12); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1.15); }
+}
+
+@keyframes sealSplitLeft {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  35% { transform: translate(-3px, -1px) rotate(-4deg) scale(1.05); opacity: 1; }
+  100% { transform: translate(-28px, 14px) rotate(-24deg) scale(0.88); opacity: 0; }
+}
+
+@keyframes sealSplitRight {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  35% { transform: translate(3px, 1px) rotate(4deg) scale(1.05); opacity: 1; }
+  100% { transform: translate(28px, 16px) rotate(26deg) scale(0.88); opacity: 0; }
+}
+
+@keyframes sealFlashGlow {
+  0% { transform: scale(0.3); opacity: 0; }
+  30% { transform: scale(1.35); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes shardFly {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 40px), var(--ty, -40px)) rotate(var(--rot, 180deg)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes envelopeUnfoldOut {
+  0% {
+    transform: perspective(1200px) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: perspective(1200px) rotateX(4deg) scale(1.015);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1200px) rotateX(-14deg) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes parchmentRevealIn {
+  0% {
+    transform: perspective(1200px) rotateX(12deg) scale(0.96);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(1200px) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-seal-shake {
+  animation: sealShake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+}
+
+.animate-seal-left {
+  animation: sealSplitLeft 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-seal-right {
+  animation: sealSplitRight 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-seal-flash {
+  animation: sealFlashGlow 0.7s ease-out forwards;
+}
+
+.animate-shard {
+  animation: shardFly 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-envelope-unfold {
+  animation: envelopeUnfoldOut 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-parchment-reveal {
+  animation: parchmentRevealIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.seal-half-left {
+  clip-path: polygon(0% 0%, 54% 0%, 44% 25%, 58% 50%, 42% 75%, 55% 100%, 0% 100%);
+}
+
+.seal-half-right {
+  clip-path: polygon(54% 0%, 100% 0%, 100% 100%, 55% 100%, 42% 75%, 58% 50%, 44% 25%);
+}
+
+.shard-1  { --tx: -58px; --ty: -42px; --rot: -145deg; }
+.shard-2  { --tx:  62px; --ty: -38px; --rot:  160deg; }
+.shard-3  { --tx: -70px; --ty:  12px; --rot: -210deg; }
+.shard-4  { --tx:  72px; --ty:  18px; --rot:  195deg; }
+.shard-5  { --tx: -42px; --ty:  56px; --rot: -120deg; }
+.shard-6  { --tx:  48px; --ty:  52px; --rot:  135deg; }
+.shard-7  { --tx: -20px; --ty: -68px; --rot:  -95deg; }
+.shard-8  { --tx:  24px; --ty: -64px; --rot:  110deg; }
+.shard-9  { --tx: -52px; --ty: -16px; --rot: -175deg; }
+.shard-10 { --tx:  54px; --ty: -14px; --rot:  175deg; }
+.shard-11 { --tx: -16px; --ty:  66px; --rot: -150deg; }
+.shard-12 { --tx:  18px; --ty:  64px; --rot:  140deg; }
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.gear-spin {
+  animation: spinSlow 60s linear infinite;
+}
+
+.gear-spin-rev {
+  animation: spinReverse 45s linear infinite;
+}
+
+@keyframes fogMove {
+  0% {
+    transform: translateX(-8%) scale(1);
+  }
+  50% {
+    transform: translateX(8%) scale(1.06);
+  }
+  100% {
+    transform: translateX(-8%) scale(1);
+  }
+}
+
+@keyframes fogMoveReverse {
+  0% {
+    transform: translateX(10%) translateY(0%);
+  }
+  50% {
+    transform: translateX(-10%) translateY(-4%);
+  }
+  100% {
+    transform: translateX(10%) translateY(0%);
+  }
+}
+
+.fog-layer {
+  animation: fogMove 22s infinite ease-in-out;
+}
+
+.fog-layer-reverse {
+  animation: fogMoveReverse 28s infinite ease-in-out;
+}
+
+/* High-Frequency Lightning Sky Flash Animations */
+@keyframes lightningSkyFlash {
+  0%, 18%, 32%, 68%, 82%, 100% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.65;
+  }
+  22% {
+    opacity: 0.12;
+  }
+  24% {
+    opacity: 0.92;
+  }
+  28% {
+    opacity: 0.25;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  72% {
+    opacity: 0.1;
+  }
+  74% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes lightningSkyFlashAlt {
+  0%, 36%, 54%, 84%, 100% {
+    opacity: 0;
+  }
+  38% {
+    opacity: 0.6;
+  }
+  40% {
+    opacity: 0.08;
+  }
+  42% {
+    opacity: 0.88;
+  }
+  46% {
+    opacity: 0.2;
+  }
+  86% {
+    opacity: 0.72;
+  }
+  89% {
+    opacity: 0.15;
+  }
+  91% {
+    opacity: 0.9;
+  }
+}
+
+/* High-Frequency Branching SVG Lightning Bolts */
+@keyframes lightningBoltStrike1 {
+  0%, 19%, 29%, 69%, 78%, 100% {
+    opacity: 0;
+    transform: scaleY(0.96);
+  }
+  20% {
+    opacity: 0.95;
+    transform: scaleY(1);
+  }
+  22% {
+    opacity: 0.15;
+  }
+  24% {
+    opacity: 1;
+    transform: scaleY(1.02);
+  }
+  70% {
+    opacity: 0.85;
+    transform: scaleY(1);
+  }
+  72% {
+    opacity: 0.1;
+  }
+  74% {
+    opacity: 1;
+    transform: scaleY(1.03);
+  }
+}
+
+@keyframes lightningBoltStrike2 {
+  0%, 37%, 47%, 85%, 94%, 100% {
+    opacity: 0;
+    transform: scaleY(0.96);
+  }
+  38% {
+    opacity: 0.9;
+    transform: scaleY(1);
+  }
+  40% {
+    opacity: 0.12;
+  }
+  42% {
+    opacity: 1;
+    transform: scaleY(1.03);
+  }
+  86% {
+    opacity: 0.88;
+    transform: scaleY(1);
+  }
+  89% {
+    opacity: 0.15;
+  }
+  91% {
+    opacity: 1;
+    transform: scaleY(1.02);
+  }
+}
+
+@keyframes lightningBoltStrike3 {
+  0%, 8%, 18%, 52%, 62%, 100% {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  9% {
+    opacity: 0.92;
+    transform: scaleY(1);
+  }
+  11% {
+    opacity: 0.15;
+  }
+  13% {
+    opacity: 1;
+    transform: scaleY(1.02);
+  }
+  53% {
+    opacity: 0.85;
+    transform: scaleY(1);
+  }
+  56% {
+    opacity: 1;
+    transform: scaleY(1.03);
+  }
+}
+
+.lightning-flash-primary {
+  animation: lightningSkyFlash 4.2s infinite ease-out;
+}
+
+.lightning-flash-secondary {
+  animation: lightningSkyFlashAlt 5.4s infinite ease-out;
+}
+
+.lightning-bolt-1 {
+  animation: lightningBoltStrike1 4.2s infinite ease-out;
+}
+
+.lightning-bolt-2 {
+  animation: lightningBoltStrike2 5.4s infinite ease-out;
+}
+
+.lightning-bolt-3 {
+  animation: lightningBoltStrike3 3.8s infinite ease-out;
+}
+
+/* Floating Gothic Embers / Ash Particles */
+@keyframes emberRise {
+  0% {
+    transform: translateY(105vh) translateX(0px) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(50vh) translateX(28px) scale(1);
+    opacity: 0.65;
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(-22px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+@keyframes bloodMoonPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.28;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.44;
+  }
+}
+
+.blood-moon-glow {
+  animation: bloodMoonPulse 8s infinite ease-in-out;
+}
+
+.ember-particle {
+  animation: emberRise linear infinite;
+}
+
+.ember-1  { left: 6%;  animation-duration: 11s; animation-delay: 0s; }
+.ember-2  { left: 14%; animation-duration: 15s; animation-delay: 2s; }
+.ember-3  { left: 23%; animation-duration: 12s; animation-delay: 4.5s; }
+.ember-4  { left: 32%; animation-duration: 17s; animation-delay: 1s; }
+.ember-5  { left: 45%; animation-duration: 13s; animation-delay: 6s; }
+.ember-6  { left: 56%; animation-duration: 16s; animation-delay: 3s; }
+.ember-7  { left: 67%; animation-duration: 10s; animation-delay: 5.5s; }
+.ember-8  { left: 76%; animation-duration: 14s; animation-delay: 1.5s; }
+.ember-9  { left: 85%; animation-duration: 12s; animation-delay: 7s; }
+.ember-10 { left: 93%; animation-duration: 15s; animation-delay: 2.5s; }
+.ember-11 { left: 18%; animation-duration: 9s;  animation-delay: 6.5s; }
+.ember-12 { left: 81%; animation-duration: 11s; animation-delay: 4s; }
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #120f1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b0000;
+  border-radius: 3px;
+}
